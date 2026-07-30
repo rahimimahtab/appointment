@@ -1,7 +1,19 @@
 package com.doctor.appointment.model;
 
+import lombok.Getter;
+
+
+@Getter
 public enum AppointmentStatus {
-    OPEN,
-    TAKEN,
-    CANCEL;
+    OPEN(0),
+    TAKEN(1),
+    CANCEL(2);
+
+   private final Integer statusCode;
+
+
+    private AppointmentStatus(Integer statusCode) {
+        this.statusCode = statusCode;
+    }
+
 }
