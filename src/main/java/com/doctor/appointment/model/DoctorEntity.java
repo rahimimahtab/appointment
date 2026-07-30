@@ -31,6 +31,8 @@ public class DoctorEntity {
     @Id
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
+    @Column(name = "national_code", nullable = false, length = 10)
+    private String nationalCode;
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
 

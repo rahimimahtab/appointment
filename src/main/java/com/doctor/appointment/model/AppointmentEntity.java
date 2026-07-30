@@ -1,9 +1,7 @@
 package com.doctor.appointment.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,9 +14,11 @@ import java.time.LocalDateTime;
                 @Index(name = "idx_appointment_status", columnList = "status")
         }
 )
-@Getter
-@Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
 public class AppointmentEntity {
     @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
