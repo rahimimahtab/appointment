@@ -29,7 +29,7 @@ public class AppointmentController {
     // POST /api/doctor/appointments
     // ========================================
 
-    @PostMapping("/")
+    @PostMapping("/register")
     public ResponseEntity<List<AppointmentResponse>> addAppointments(
             @Valid @RequestBody AppointmentRequest request) {
 

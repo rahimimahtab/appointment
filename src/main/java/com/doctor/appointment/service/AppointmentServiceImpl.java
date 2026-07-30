@@ -5,10 +5,13 @@ import com.doctor.appointment.dto.AppointmentResponse;
 import com.doctor.appointment.dto.DailyAppointmentsResponse;
 import com.doctor.appointment.exception.AppointmentNotFoundException;
 import com.doctor.appointment.exception.AppointmentNotOpenException;
+import com.doctor.appointment.exception.DoctorNotFoundException;
 import com.doctor.appointment.exception.InvalidTimeRangeException;
 import com.doctor.appointment.model.AppointmentEntity;
 import com.doctor.appointment.model.AppointmentStatus;
+import com.doctor.appointment.model.DoctorEntity;
 import com.doctor.appointment.repository.AppointmentRepository;
+import com.doctor.appointment.repository.DoctorRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -19,12 +22,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentRepository appointmentRepository;
+    private final DoctorRepository doctorRepository;
 
     // ========================================
     // 1. اضافه کردن نوبت‌ها (با تقسیم به بازه‌های ۳۰ دقیقه‌ای)
@@ -44,6 +49,14 @@ public class AppointmentServiceImpl implements AppointmentService {
             return new ArrayList<>();
         }
 
+        Optional<DoctorEntity> doctorEntity = doctorRepository.findByNationalCode(request.getNationalCode());
+        if (doctorEntity.isEmpty()){
+            throw new DoctorNotFoundException("national code is invalid");
+        }
+
+
+
+
         List<AppointmentEntity> createdAppointments = new ArrayList<>();
         LocalDateTime current = request.getStartTime();
 
@@ -62,6 +75,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                         .startTime(current)
                         .endTime(slotEnd)
                         .status(AppointmentStatus.OPEN)
+                        .doctor(doctorEntity.get())
                         .build();
 
                 AppointmentEntity saved = appointmentRepository.save(appointment);

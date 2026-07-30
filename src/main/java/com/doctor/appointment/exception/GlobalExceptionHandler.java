@@ -133,4 +133,43 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
+    // ========================================
+    // 404 - Doctor Not Found
+    // ========================================
+
+    @ExceptionHandler(DoctorNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleDoctorNotFound(
+            DoctorNotFoundException ex, WebRequest request) {
+
+        log.error("Doctor not found: {}", ex.getMessage());
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                "Not Found",
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    // ========================================
+    // 409 - Doctor Already Exists
+    // ========================================
+
+    @ExceptionHandler(DoctorAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleDoctorAlreadyExists(
+            DoctorAlreadyExistsException ex, WebRequest request) {
+
+        log.error("Doctor already exists: {}", ex.getMessage());
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                "Conflict",
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+
+
+
 }
